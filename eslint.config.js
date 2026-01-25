@@ -6,6 +6,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import pluginQuery from '@tanstack/eslint-plugin-query';
 
 export default [
   {
@@ -27,6 +28,7 @@ export default [
       'react-hooks': reactHooks,
       '@typescript-eslint': tseslint,
       prettier,
+      '@tanstack/query': pluginQuery,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -37,7 +39,13 @@ export default [
       'prettier/prettier': ['error'],
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@tanstack/query/exhaustive-deps': 'error', // Ensures query keys are correct
+      '@tanstack/query/no-rest-destructuring': 'warn', // Prevents losing reactivity
+      '@tanstack/query/stable-query-client': 'error', // Ensures QueryClient is stable
     },
     settings: {
       react: { version: 'detect' },
