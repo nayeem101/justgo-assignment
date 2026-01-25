@@ -1,19 +1,44 @@
-const App = () => {
-  return (
-    <div className="font-sans min-h-screen bg-linear-to-r from-blue-400 to-purple-500 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-md">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          🎉 Tailwind CSS is Working!
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your React + Tailwind setup is complete.
-        </p>
-        <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-          Get Started
-        </button>
-      </div>
-    </div>
-  );
-};
+import { Navigate, Route, Routes } from 'react-router';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { RootLayout } from './components/layout/RootLayout';
+import { CategoriesPage } from './pages/CategoriesPage';
+import { NotFoundPage } from './pages/NotFoundPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
+import { ProductsPage } from './pages/ProductsPage';
+import { SearchPage } from './pages/SearchPage';
+import { SettingsPage } from './pages/SettingsPage';
 
-export default App;
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <Routes>
+        {/* Root layout wraps all pages */}
+        <Route element={<RootLayout />}>
+          {/* Redirect root to products */}
+          <Route index element={<Navigate to="/products" replace />} />
+
+          {/* Products routes */}
+          <Route path="products">
+            {/* /products - Product list */}
+            <Route index element={<ProductsPage />} />
+
+            {/* /products/categories - Must be before :id */}
+            <Route path="categories" element={<CategoriesPage />} />
+
+            {/* /products/search - Must be before :id */}
+            <Route path="search" element={<SearchPage />} />
+
+            {/* /products/:id - Dynamic route last */}
+            <Route path=":id" element={<ProductDetailPage />} />
+          </Route>
+
+          {/* Settings */}
+          <Route path="settings" element={<SettingsPage />} />
+
+          {/* 404 catch-all */}
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
+  );
+}
