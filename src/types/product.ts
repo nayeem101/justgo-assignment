@@ -63,6 +63,7 @@ export interface GetProductsParams {
   limit?: number;
   skip?: number;
   select?: string[];
+  signal?: AbortSignal; // For request cancellation
 }
 
 export interface SearchProductsParams extends GetProductsParams {

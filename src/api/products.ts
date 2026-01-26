@@ -31,6 +31,7 @@ export const productsApi = {
   getAll: async (params?: GetProductsParams): Promise<ProductsResponse> => {
     const response = await apiClient.get<ProductsResponse>('/products', {
       params: buildProductsQuery(params),
+      signal: params?.signal, // For request cancellation
     });
 
     return response.data;
@@ -57,6 +58,7 @@ export const productsApi = {
         q: query,
         ...buildProductsQuery(rest),
       },
+      signal: params?.signal, // For request cancellation
     });
 
     return response.data;
@@ -74,6 +76,7 @@ export const productsApi = {
       `/products/category/${encodeURIComponent(category)}`,
       {
         params: buildProductsQuery(params),
+        signal: params?.signal, // For request cancellation
       },
     );
 
@@ -84,8 +87,10 @@ export const productsApi = {
    * Get all categories
    * GET /products/categories
    */
-  getCategories: async (): Promise<Category[]> => {
-    const response = await apiClient.get<Category[]>('/products/categories');
+  getCategories: async (signal?: AbortSignal): Promise<Category[]> => {
+    const response = await apiClient.get<Category[]>('/products/categories', {
+      signal,
+    });
     return response.data;
   },
 
@@ -93,8 +98,10 @@ export const productsApi = {
    * Get category list (just slugs)
    * GET /products/category-list
    */
-  getCategoryList: async (): Promise<string[]> => {
-    const response = await apiClient.get<string[]>('/products/category-list');
+  getCategoryList: async (signal?: AbortSignal): Promise<string[]> => {
+    const response = await apiClient.get<string[]>('/products/category-list', {
+      signal,
+    });
     return response.data;
   },
 };
