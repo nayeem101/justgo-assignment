@@ -16,7 +16,10 @@ const axiosInstance = axios.create({
  * @returns A promise that resolves to the response data.
  */
 
-export async function apiRequest<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
+export async function apiRequest<T>(
+  url: string,
+  config?: AxiosRequestConfig,
+): Promise<T> {
   const response = await axiosInstance.request<T>({
     url,
     ...config,
