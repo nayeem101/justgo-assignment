@@ -1,29 +1,11 @@
-import axios, { type AxiosRequestConfig } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 
-const axiosInstance = axios.create({
-  baseURL: 'https://dummyjson.com',
+const BASE_URL = 'https://dummyjson.com';
+
+export const apiClient: AxiosInstance = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10_000, // 10 seconds
   headers: {
     'Content-Type': 'application/json',
   },
 });
-
-/**
- * Generic helper to perform API requests using the configured axios instance.
- *
- * @template T - The expected type of the response data.
- * @param url - The API URL endpoint.
- * @param config - Optional axios request configuration.
- * @returns A promise that resolves to the response data.
- */
-
-export async function apiRequest<T>(
-  url: string,
-  config?: AxiosRequestConfig,
-): Promise<T> {
-  const response = await axiosInstance.request<T>({
-    url,
-    ...config,
-  });
-
-  return response.data;
-}
