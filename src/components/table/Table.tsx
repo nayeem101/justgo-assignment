@@ -87,11 +87,22 @@ export function Table<T>({
       <div
         onScroll={onScroll}
         className="overflow-auto"
-        style={{ maxHeight: containerHeight }}
+        style={{
+          maxHeight: containerHeight,
+          willChange: 'transform',
+          transform: 'translateZ(0)', // Force GPU acceleration
+        }}
       >
         {/* Top padding spacer */}
         {paddingTop > 0 && (
-          <div style={{ height: paddingTop }} aria-hidden="true" />
+          <div
+            style={{
+              height: paddingTop,
+              contain: 'strict',
+              pointerEvents: 'none',
+            }}
+            aria-hidden="true"
+          />
         )}
 
         <table className={cn('w-full', tableClassName)}>
@@ -113,7 +124,14 @@ export function Table<T>({
 
         {/* Bottom padding spacer */}
         {paddingBottom > 0 && (
-          <div style={{ height: paddingBottom }} aria-hidden="true" />
+          <div
+            style={{
+              height: paddingBottom,
+              contain: 'strict',
+              pointerEvents: 'none',
+            }}
+            aria-hidden="true"
+          />
         )}
       </div>
     </div>

@@ -120,8 +120,11 @@ export function useVirtualTable({
       Math.ceil((scrollTop + containerHeight) / itemHeight) + buffer,
     );
 
-    const paddingTop = startIndex * itemHeight;
-    const paddingBottom = Math.max(0, (itemCount - endIndex) * itemHeight);
+    // Round padding values to prevent fractional pixel shifts
+    const paddingTop = Math.round(startIndex * itemHeight);
+    const paddingBottom = Math.round(
+      Math.max(0, (itemCount - endIndex) * itemHeight),
+    );
 
     return {
       startIndex,
