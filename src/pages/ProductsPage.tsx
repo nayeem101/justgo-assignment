@@ -1,20 +1,38 @@
+import { Search } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { EmptyState } from '../components/EmptyState';
-import { InfiniteScrollTrigger } from '../components/InfiniteScrollTrigger';
 import { PageHeader } from '../components/product/PageHeader';
-import { ProductCard } from '../components/product/ProductCard';
-import { ProductCardSkeleton } from '../components/product/ProductCardSkeleton';
 import { ProductFilters } from '../components/product/ProductFilters';
+import { ProductTable } from '../components/product/ProductTable';
 import { Button } from '../components/ui/Button';
-import { useProductFilters } from '../hooks/useProductFilters';
-import { useInfiniteProducts } from '../hooks/queries/useProducts';
+
 import { useCategories } from '../hooks/queries/useCategories';
+import { useInfiniteProducts } from '../hooks/queries/useProducts';
+import { useProductFilters } from '../hooks/useProductFilters';
 import { useSortedProducts } from '../hooks/useSortedProducts';
-import { Download, Plus, Search } from 'lucide-react';
-import { useCallback } from 'react';
 
 const ITEMS_PER_PAGE = 20;
 
 export function ProductsPage() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState(600);
+
+  // Calculate container height based on viewport
+  useEffect(() => {
+    const updateHeight = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      // Leave some padding at the bottom
+      const availableHeight = window.innerHeight - rect.top - 40;
+      setContainerHeight(Math.max(400, Math.min(availableHeight, 800)));
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
+
   // URL-driven filters
   const {
     filters,
@@ -69,7 +87,7 @@ export function ProductsPage() {
     [setFilter],
   );
 
-  const handleLoadMore = useCallback(() => {
+  const handleScrollEnd = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
@@ -98,24 +116,7 @@ export function ProductsPage() {
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
-      <PageHeader
-        title="Products"
-        count={total}
-        countLabel="products"
-        actions={
-          <>
-            <Button
-              variant="secondary"
-              leftIcon={<Download className="h-4 w-4" />}
-            >
-              Export
-            </Button>
-            <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
-              Add product
-            </Button>
-          </>
-        }
-      />
+      <PageHeader title="Products" count={total} countLabel="products" />
 
       {/* Filters */}
       <ProductFilters
@@ -130,47 +131,33 @@ export function ProductsPage() {
         isLoading={isCategoriesLoading}
       />
 
-      {/* Product List */}
-      <div className="flex flex-col gap-4">
-        {isLoading ? (
-          // Initial loading skeletons
-          Array.from({ length: 5 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
-          ))
-        ) : sortedProducts.length > 0 ? (
-          // Product cards
-          sortedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))
-        ) : (
-          // Empty state
-          <EmptyState
-            icon={<Search className="w-8 h-8" />}
-            title="No products found"
-            description={
-              hasActiveFilters
-                ? "Try adjusting your filters to find what you're looking for."
-                : 'No products available at the moment.'
-            }
-            action={
-              hasActiveFilters ? (
-                <Button variant="primary" onClick={clearFilters}>
-                  Clear Filters
-                </Button>
-              ) : undefined
-            }
-          />
-        )}
+      {/* Product Table */}
+      <div ref={containerRef} className="mt-4">
+        <ProductTable
+          products={sortedProducts}
+          isLoading={isLoading}
+          isFetchingMore={isFetchingNextPage}
+          hasActiveFilters={hasActiveFilters}
+          onClearFilters={clearFilters}
+          onScrollEnd={handleScrollEnd}
+          virtualized={true}
+          containerHeight={containerHeight}
+        />
       </div>
 
-      {/* Infinite Scroll Trigger */}
-      {!isLoading && sortedProducts.length > 0 && (
-        <InfiniteScrollTrigger
-          onIntersect={handleLoadMore}
-          hasMore={!!hasNextPage}
-          isLoading={isFetchingNextPage}
-        />
-      )}
+      {/* Loading indicator outside table (optional) */}
+      <div className="py-2 flex bg-white shadow-sm rounded-bl-lg rounded-br-lg items-center justify-center gap-3">
+        {isFetchingNextPage ? (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-indigo-500 border-t-transparent" />
+            <p className="text-sm text-slate-500">Loading more products...</p>
+          </>
+        ) : (
+          <p className="text-sm text-slate-500">
+            Showing {sortedProducts.length} of {total} products
+          </p>
+        )}
+      </div>
     </div>
   );
 }

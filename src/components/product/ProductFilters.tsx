@@ -132,7 +132,7 @@ export function ProductFilters({
           onClick={handleClear}
           disabled={!hasActiveFilters}
           leftIcon={<X className="h-4 w-4" />}
-          className="whitespace-nowrap"
+          className="whitespace-nowrap border border-slate-200 rounded-lg"
         >
           Clear
         </Button>

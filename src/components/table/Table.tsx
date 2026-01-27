@@ -1,0 +1,121 @@
+import { useVirtualTable } from '../../hooks/useVirtualTable';
+import type { TableProps } from '../../types/table';
+import { cn } from '../../utils/cn';
+import { TableBody } from './TableBody';
+import { TableHead } from './TableHead';
+
+const DEFAULT_ROW_HEIGHT = 73;
+const DEFAULT_CONTAINER_HEIGHT = 600;
+const DEFAULT_OVERSCAN = 5;
+
+export function Table<T>({
+  data,
+  columns,
+  keyExtractor,
+  isLoading = false,
+  skeletonCount = 5,
+  isFetchingMore = false,
+  virtualized = false,
+  rowHeight = DEFAULT_ROW_HEIGHT,
+  containerHeight = DEFAULT_CONTAINER_HEIGHT,
+  overscan = DEFAULT_OVERSCAN,
+  className,
+  tableClassName,
+  emptyState,
+  onScrollEnd,
+  scrollEndThreshold = 200,
+}: TableProps<T>) {
+  // Virtualization hook
+  const { startIndex, endIndex, paddingTop, paddingBottom, onScroll } =
+    useVirtualTable({
+      itemCount: data.length,
+      itemHeight: rowHeight,
+      containerHeight,
+      buffer: overscan,
+      enabled: virtualized && !isLoading,
+      onScrollEnd,
+      scrollEndThreshold,
+      isFetchingMore, // Pass to prevent scroll during fetch
+    });
+
+  // Empty state
+  if (!isLoading && data.length === 0 && emptyState) {
+    return (
+      <div
+        className={cn('bg-white rounded-lg border border-slate-200', className)}
+      >
+        {emptyState}
+      </div>
+    );
+  }
+
+  // Non-virtualized table (simple version)
+  if (!virtualized) {
+    return (
+      <div
+        className={cn(
+          'bg-white rounded-lg shadow-sm',
+          'border border-slate-200',
+          'overflow-x-auto',
+          className,
+        )}
+      >
+        <table className={cn('w-full', tableClassName)}>
+          <TableHead columns={columns} />
+          <TableBody
+            data={data}
+            columns={columns}
+            keyExtractor={keyExtractor}
+            isLoading={isLoading}
+            skeletonCount={skeletonCount}
+            isFetchingMore={isFetchingMore}
+          />
+        </table>
+      </div>
+    );
+  }
+
+  // Virtualized table - SINGLE table with sticky header
+  return (
+    <div
+      className={cn(
+        'bg-white rounded-lg shadow-sm',
+        'border border-slate-200',
+        className,
+      )}
+    >
+      <div
+        onScroll={onScroll}
+        className="overflow-auto"
+        style={{ maxHeight: containerHeight }}
+      >
+        {/* Top padding spacer */}
+        {paddingTop > 0 && (
+          <div style={{ height: paddingTop }} aria-hidden="true" />
+        )}
+
+        <table className={cn('w-full', tableClassName)}>
+          {/* Sticky header - same table, CSS sticky */}
+          <TableHead columns={columns} sticky />
+
+          <TableBody
+            data={data}
+            columns={columns}
+            keyExtractor={keyExtractor}
+            startIndex={startIndex}
+            endIndex={endIndex}
+            rowHeight={rowHeight}
+            isLoading={isLoading}
+            skeletonCount={skeletonCount}
+            isFetchingMore={isFetchingMore}
+          />
+        </table>
+
+        {/* Bottom padding spacer */}
+        {paddingBottom > 0 && (
+          <div style={{ height: paddingBottom }} aria-hidden="true" />
+        )}
+      </div>
+    </div>
+  );
+}

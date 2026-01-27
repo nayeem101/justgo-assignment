@@ -1,6 +1,8 @@
+import { cn } from '../../utils/cn';
+
 interface StockBadgeProps {
   stock: number;
-  className?: string;
+  showCount?: boolean;
 }
 
 type StockStatus = 'in-stock' | 'low-stock' | 'out-of-stock';
@@ -10,42 +12,43 @@ function getStockStatus(stock: number): StockStatus {
   if (stock <= 10) return 'low-stock';
   return 'in-stock';
 }
-
 const statusConfig: Record<
   StockStatus,
-  { label: string; dotColor: string; textColor: string }
+  { label: string; dotClass: string; badgeClass: string }
 > = {
   'in-stock': {
     label: 'In Stock',
-    dotColor: 'bg-emerald-500',
-    textColor: 'text-emerald-700',
+    dotClass: 'bg-emerald-500',
+    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-100',
   },
   'low-stock': {
     label: 'Low Stock',
-    dotColor: 'bg-amber-500',
-    textColor: 'text-amber-700',
+    dotClass: 'bg-amber-500',
+    badgeClass: 'bg-amber-50 text-amber-700 border-amber-100',
   },
   'out-of-stock': {
     label: 'Out of Stock',
-    dotColor: 'bg-red-500',
-    textColor: 'text-red-700',
+    dotClass: 'bg-red-500',
+    badgeClass: 'bg-red-50 text-red-700 border-red-100',
   },
 };
 
-export function StockBadge({ stock, className = '' }: StockBadgeProps) {
+export function StockBadge({ stock, showCount = false }: StockBadgeProps) {
   const status = getStockStatus(stock);
   const config = statusConfig[status];
 
   return (
     <span
-      className={`
-        inline-flex items-center gap-1.5 text-xs font-medium
-        ${config.textColor}
-        ${className}
-      `}
+      className={cn(
+        'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border',
+        config.badgeClass,
+      )}
     >
-      <span className={`size-1.5 rounded-full ${config.dotColor}`} />
-      {config.label} {stock > 0 && `(${stock})`}
+      <span className={cn('size-1.5 rounded-full', config.dotClass)} />
+      {config.label}
+      {showCount && status !== 'out-of-stock' && (
+        <span className="text-xs opacity-75">({stock})</span>
+      )}
     </span>
   );
 }

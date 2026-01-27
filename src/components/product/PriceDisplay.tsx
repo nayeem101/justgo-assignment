@@ -3,49 +3,58 @@ import { currencyConfig, useSettingsStore } from '../../store/useSettingsStore';
 interface PriceDisplayProps {
   price: number;
   discountPercentage?: number;
-  className?: string;
+  layout?: 'stacked' | 'inline';
+  showOriginalPrice?: boolean;
 }
 
 export function PriceDisplay({
   price,
   discountPercentage = 0,
-  className = '',
+  layout = 'stacked',
+  showOriginalPrice = true,
 }: PriceDisplayProps) {
   const currency = useSettingsStore((state) => state.currency);
-  const config = currencyConfig[currency];
-
-  const convertedPrice = price * config.rate;
-  const discountedPrice =
-    discountPercentage > 0
-      ? convertedPrice * (1 - discountPercentage / 100)
-      : convertedPrice;
-
-  const formatPrice = (amount: number) => {
-    return new Intl.NumberFormat(config.locale, {
-      style: 'currency',
-      currency: currency,
-    }).format(amount);
-  };
+  const { rate, locale } = currencyConfig[currency];
 
   const hasDiscount = discountPercentage > 0;
+  const discountedPrice = hasDiscount
+    ? price * (1 - discountPercentage / 100)
+    : price;
 
-  return (
-    <div className={`text-right ${className}`}>
-      <div className="flex items-center justify-end gap-2">
-        {hasDiscount && (
-          <span className="text-sm text-slate-400 line-through">
-            {formatPrice(convertedPrice)}
-          </span>
-        )}
-        <span
-          className={`
-            text-xl font-extrabold tabular-nums
-            ${hasDiscount ? 'text-red-600' : 'text-foreground'}
-          `}
-        >
+  const formatPrice = (value: number) => {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+    }).format(value * rate);
+  };
+
+  if (layout === 'inline') {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-medium text-slate-900 tabular-nums">
           {formatPrice(discountedPrice)}
         </span>
+        {hasDiscount && showOriginalPrice && (
+          <span className="text-xs text-slate-400 line-through tabular-nums">
+            {formatPrice(price)}
+          </span>
+        )}
       </div>
+    );
+  }
+
+  // Stacked layout (original)
+  return (
+    <div className="flex flex-col items-end">
+      <span className="text-lg font-bold text-slate-900 tabular-nums">
+        {formatPrice(discountedPrice)}
+      </span>
+      {hasDiscount && showOriginalPrice && (
+        <span className="text-sm text-slate-400 line-through tabular-nums">
+          {formatPrice(price)}
+        </span>
+      )}
     </div>
   );
 }
