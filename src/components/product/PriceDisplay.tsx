@@ -1,10 +1,12 @@
 import { currencyConfig, useSettingsStore } from '../../store/useSettingsStore';
+import { cn } from '../../utils/cn';
 
 interface PriceDisplayProps {
   price: number;
   discountPercentage?: number;
   layout?: 'stacked' | 'inline';
   showOriginalPrice?: boolean;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 export function PriceDisplay({
@@ -12,6 +14,7 @@ export function PriceDisplay({
   discountPercentage = 0,
   layout = 'stacked',
   showOriginalPrice = true,
+  size = 'md',
 }: PriceDisplayProps) {
   const currency = useSettingsStore((state) => state.currency);
   const { rate, locale } = currencyConfig[currency];
@@ -29,14 +32,39 @@ export function PriceDisplay({
     }).format(value * rate);
   };
 
+  const sizeClasses = {
+    sm: {
+      current: 'text-sm font-medium',
+      original: 'text-xs',
+    },
+    md: {
+      current: 'text-base font-semibold',
+      original: 'text-sm',
+    },
+    lg: {
+      current: 'text-2xl font-bold',
+      original: 'text-base',
+    },
+  };
+
   if (layout === 'inline') {
     return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-slate-900 tabular-nums">
+      <div className="flex items-baseline gap-2">
+        <span
+          className={cn(
+            'text-slate-900 tabular-nums',
+            sizeClasses[size].current,
+          )}
+        >
           {formatPrice(discountedPrice)}
         </span>
         {hasDiscount && showOriginalPrice && (
-          <span className="text-xs text-slate-400 line-through tabular-nums">
+          <span
+            className={cn(
+              'text-slate-400 line-through tabular-nums',
+              sizeClasses[size].original,
+            )}
+          >
             {formatPrice(price)}
           </span>
         )}
@@ -44,14 +72,21 @@ export function PriceDisplay({
     );
   }
 
-  // Stacked layout (original)
+  // Stacked layout
   return (
     <div className="flex flex-col items-end">
-      <span className="text-lg font-bold text-slate-900 tabular-nums">
+      <span
+        className={cn('text-slate-900 tabular-nums', sizeClasses[size].current)}
+      >
         {formatPrice(discountedPrice)}
       </span>
       {hasDiscount && showOriginalPrice && (
-        <span className="text-sm text-slate-400 line-through tabular-nums">
+        <span
+          className={cn(
+            'text-slate-400 line-through tabular-nums',
+            sizeClasses[size].original,
+          )}
+        >
           {formatPrice(price)}
         </span>
       )}
