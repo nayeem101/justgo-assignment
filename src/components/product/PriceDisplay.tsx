@@ -74,7 +74,7 @@ export function PriceDisplay({
 
   // Stacked layout
   return (
-    <div className="flex flex-col items-end">
+    <div className="flex flex-col items-start">
       <span
         className={cn('text-slate-900 tabular-nums', sizeClasses[size].current)}
       >

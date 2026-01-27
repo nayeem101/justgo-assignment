@@ -9,8 +9,8 @@ interface TableHeadProps<T> {
 
 export function TableHead<T>({ columns, sticky = false }: TableHeadProps<T>) {
   return (
-    <thead className={cn(sticky && 'sticky top-0 z-10 bg-white p-1')}>
-      <tr className="border-b border-slate-200 bg-slate-100/80 backdrop-blur-sm rounded-tl-lg rounded-tr-lg">
+    <thead className={cn(sticky && 'sticky top-0 z-10 p-1')}>
+      <tr className="border-b border-slate-200 bg-slate-100/80 backdrop-blur-sm rounded-tl-lg rounded-tr-lg shadow-sm">
         {columns.map((column) => (
           <TableHeaderCell key={column.key} column={column} />
         ))}

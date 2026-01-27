@@ -41,7 +41,7 @@ export function ProductGridCard({ product }: ProductGridCardProps) {
               {product.brand}
             </span>
           )}
-          <Badge variant="default" size="sm" className="shrink-0">
+          <Badge variant="default" size="sm" className="shrink-0 capitalize">
             {product.category}
           </Badge>
         </div>

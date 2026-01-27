@@ -20,7 +20,7 @@ export function TableHeaderCell<T>({ column }: TableHeaderCellProps<T>) {
   return (
     <th
       className={cn(
-        'px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider',
+        'px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider',
         alignmentClass,
         visibilityClass,
         column.headerClassName,

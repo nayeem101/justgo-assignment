@@ -48,7 +48,7 @@ export const productColumns: Column<Product>[] = [
     width: '150px',
     hideOnMobile: true,
     render: (product) => (
-      <Badge variant="default" size="sm">
+      <Badge variant="default" size="sm" className="capitalize">
         {product.category}
       </Badge>
     ),
@@ -61,7 +61,8 @@ export const productColumns: Column<Product>[] = [
       <PriceDisplay
         price={product.price}
         discountPercentage={product.discountPercentage}
-        layout="inline"
+        layout="stacked"
+        size="sm"
       />
     ),
   },

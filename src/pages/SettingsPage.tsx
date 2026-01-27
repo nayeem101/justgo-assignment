@@ -85,7 +85,7 @@ export function SettingsPage() {
             See how prices will be displayed with your selected currency.
           </p>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <PricePreview
               label="Sample Price"
               basePrice={99.99}
