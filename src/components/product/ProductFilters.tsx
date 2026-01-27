@@ -72,7 +72,7 @@ export function ProductFilters({
   const hasActiveFilters = !!(searchQuery || category || sortBy);
 
   return (
-    <div className="mb-6 p-3 bg-card rounded-xl shadow-sm border border-border flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-20 z-40">
+    <div className="mb-6 p-3 bg-card rounded-xl shadow-sm border border-border flex flex-col md:flex-row md:items-center justify-between gap-4 sticky top-18 z-40">
       {/* Search Input */}
       {showSearchInput && (
         <div className="flex items-center w-full md:max-w-md">
