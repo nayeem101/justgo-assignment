@@ -80,9 +80,11 @@ export function Header() {
         {/* Right Side - Currency Display */}
         <div className="flex items-center gap-3">
           {/* Currency Badge */}
-          <Badge variant="default" size="lg">
-            {symbol} {currency}
-          </Badge>
+          <span title={`Currency: ${symbol} ${currency}`}>
+            <Badge variant="default" size="lg">
+              {symbol} {currency}
+            </Badge>
+          </span>
 
           {/* Mobile Menu Button */}
           <MobileNav />

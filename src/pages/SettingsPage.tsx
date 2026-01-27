@@ -26,17 +26,15 @@ export function SettingsPage() {
     setCurrency(selectedCurrency);
     setIsSaved(true);
 
-    // Reset saved indicator after 2 seconds
-    setTimeout(() => setIsSaved(false), 2000);
+    // Reset saved indicator after 1 second
+    setTimeout(() => setIsSaved(false), 1000);
   };
 
   // Handle cancel
   const handleCancel = () => {
     if (hasChanges) {
-      // Reset to stored value
       setSelectedCurrency(storedCurrency);
     } else {
-      // Navigate back
       navigate(-1);
     }
   };
@@ -125,7 +123,7 @@ function PricePreview({
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat(config.locale, {
       style: 'currency',
-      currency: currency,
+      currency,
     }).format(price * config.rate);
   };
 
