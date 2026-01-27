@@ -51,9 +51,7 @@ export function Header() {
           <div className="p-1.5 bg-indigo-100 rounded-lg">
             <Package className="h-5 w-5 text-indigo-600" />
           </div>
-          <span className="text-lg font-bold hidden sm:block">
-            Product Explorer
-          </span>
+          <span className="text-lg font-bold">Product Explorer</span>
         </Link>
 
         {/* Navigation */}

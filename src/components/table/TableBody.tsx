@@ -12,6 +12,11 @@ interface TableBodyProps<T> {
   endIndex?: number;
   rowHeight?: number;
 
+  // Virtualization spacers (rendered inside tbody)
+  paddingTop?: number;
+  paddingBottom?: number;
+  columnCount?: number;
+
   // Loading states
   isLoading?: boolean;
   skeletonCount?: number;
@@ -25,10 +30,15 @@ export function TableBody<T>({
   startIndex = 0,
   endIndex,
   rowHeight,
+  paddingTop = 0,
+  paddingBottom = 0,
+  columnCount,
   isLoading,
   skeletonCount = 5,
   isFetchingMore,
 }: TableBodyProps<T>) {
+  const colSpan = columnCount ?? columns.length;
+
   // Initial loading state
   if (isLoading) {
     return (
@@ -48,6 +58,21 @@ export function TableBody<T>({
 
   return (
     <tbody>
+      {/* Top spacer row - inside tbody for stable sticky header */}
+      {paddingTop > 0 && (
+        <tr aria-hidden="true">
+          <td
+            colSpan={colSpan}
+            style={{
+              height: paddingTop,
+              padding: 0,
+              border: 'none',
+              lineHeight: 0,
+            }}
+          />
+        </tr>
+      )}
+
       {/* Data rows */}
       {visibleData.map((item, idx) => {
         const actualIndex = startIndex + idx;
@@ -65,6 +90,21 @@ export function TableBody<T>({
       {/* Fetching more skeleton */}
       {isFetchingMore && (
         <TableSkeleton columns={columns} rowCount={3} rowHeight={rowHeight} />
+      )}
+
+      {/* Bottom spacer row - inside tbody for stable sticky header */}
+      {paddingBottom > 0 && (
+        <tr aria-hidden="true">
+          <td
+            colSpan={colSpan}
+            style={{
+              height: paddingBottom,
+              padding: 0,
+              border: 'none',
+              lineHeight: 0,
+            }}
+          />
+        </tr>
       )}
     </tbody>
   );

@@ -3,32 +3,37 @@ import { cn } from '../../utils/cn';
 
 interface TableHeaderCellProps<T> {
   column: Column<T>;
+  sticky?: boolean;
 }
 
-export function TableHeaderCell<T>({ column }: TableHeaderCellProps<T>) {
-  const alignmentClass = {
-    left: 'text-left',
-    center: 'text-center',
-    right: 'text-right',
-  }[column.align || 'left'];
+// Helper to get text alignment class
+function getAlignClass(align?: 'left' | 'center' | 'right'): string {
+  switch (align) {
+    case 'center':
+      return 'text-center';
+    case 'right':
+      return 'text-right';
+    default:
+      return 'text-left';
+  }
+}
 
-  const visibilityClass = cn(
-    column.hideOnMobile && 'hidden sm:table-cell',
-    column.hideOnTablet && 'hidden lg:table-cell',
-  );
-
+export function TableHeaderCell<T>({
+  column,
+  sticky,
+}: TableHeaderCellProps<T>) {
   return (
     <th
       className={cn(
-        'px-6 py-3 text-xs font-semibold text-slate-600 uppercase tracking-wider',
-        alignmentClass,
-        visibilityClass,
+        'px-6 py-3',
+        'text-xs font-semibold text-slate-600 uppercase tracking-wider',
+        sticky && 'bg-slate-100',
+        getAlignClass(column.align),
         column.headerClassName,
+        column.hideOnMobile && 'hidden sm:table-cell',
+        column.hideOnTablet && 'hidden lg:table-cell',
       )}
-      style={{
-        width: column.width,
-        minWidth: column.width, // Ensure minimum width
-      }}
+      style={{ width: column.width }}
     >
       {column.header}
     </th>

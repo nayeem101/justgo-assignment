@@ -9,10 +9,19 @@ interface TableHeadProps<T> {
 
 export function TableHead<T>({ columns, sticky = false }: TableHeadProps<T>) {
   return (
-    <thead className={cn(sticky && 'sticky top-0 z-10 p-1')}>
-      <tr className="border-b border-slate-200 bg-slate-100/80 backdrop-blur-sm rounded-tl-lg rounded-tr-lg shadow-sm">
+    <thead
+      className={cn('bg-slate-100', sticky && 'sticky top-0 z-10')}
+      // Ensure sticky works during fast scrolling
+      style={sticky ? { position: 'sticky', top: 0 } : undefined}
+    >
+      <tr className="border-b border-slate-200 bg-slate-100 shadow-sm">
         {columns.map((column) => (
-          <TableHeaderCell key={column.key} column={column} />
+          <TableHeaderCell
+            key={column.key}
+            column={column}
+            // Pass sticky prop to ensure th has background
+            sticky={sticky}
+          />
         ))}
       </tr>
     </thead>
