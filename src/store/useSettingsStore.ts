@@ -8,11 +8,14 @@ interface SettingsState {
   setCurrency: (val: Currency) => void;
 }
 
-export const currencyConfig = {
+export const currencyConfig: Record<
+  Currency,
+  { symbol: string; rate: number; locale: string }
+> = {
   USD: { symbol: '$', rate: 1, locale: 'en-US' },
   GBP: { symbol: '£', rate: 0.79, locale: 'en-GB' },
   EUR: { symbol: '€', rate: 0.92, locale: 'de-DE' },
-} as const;
+};
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
