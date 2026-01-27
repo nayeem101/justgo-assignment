@@ -46,6 +46,8 @@ export default [
       '@tanstack/query/exhaustive-deps': 'error', // Ensures query keys are correct
       '@tanstack/query/no-rest-destructuring': 'warn', // Prevents losing reactivity
       '@tanstack/query/stable-query-client': 'error', // Ensures QueryClient is stable
+      // Disable React Compiler rules since babel-plugin-react-compiler is not enabled
+      'react-hooks/preserve-manual-memoization': 'off',
     },
     settings: {
       react: { version: 'detect' },
