@@ -116,7 +116,7 @@ export function ProductFilters({
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}
             options={sortOptions}
-            placeholder="Price"
+            placeholder="Sort by"
             leftIcon={<ArrowUpDown className="h-4 w-4" />}
             className="w-44"
           />

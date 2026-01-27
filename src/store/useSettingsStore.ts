@@ -2,10 +2,17 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type Currency = 'USD' | 'GBP' | 'EUR';
+export type ViewMode = 'grid' | 'list';
 
 interface SettingsState {
+  // Currency settings
   currency: Currency;
   setCurrency: (val: Currency) => void;
+
+  // View mode settings
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
+  toggleViewMode: () => void;
 }
 
 export const currencyConfig: Record<
@@ -20,8 +27,17 @@ export const currencyConfig: Record<
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
+      // Currency settings
       currency: 'USD',
       setCurrency: (currency) => set({ currency }),
+
+      // View mode settings
+      viewMode: 'grid',
+      setViewMode: (viewMode) => set({ viewMode }),
+      toggleViewMode: () =>
+        set((state) => ({
+          viewMode: state.viewMode === 'grid' ? 'list' : 'grid',
+        })),
     }),
     { name: 'app-settings' },
   ),
