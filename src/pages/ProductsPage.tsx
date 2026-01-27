@@ -64,28 +64,15 @@ export function ProductsPage() {
   const sortedProducts = useSortedProducts(products, filters.sort);
 
   // Handlers
-  const handleSearch = useCallback(
-    (query: string) => {
-      if (query.trim()) {
-        navigateToSearch(query);
-      }
-    },
-    [navigateToSearch],
-  );
+  const handleSearch = (query: string) => {
+    if (query.trim()) {
+      navigateToSearch(query);
+    }
+  };
 
-  const handleCategoryChange = useCallback(
-    (value: string) => {
-      setFilter('category', value);
-    },
-    [setFilter],
-  );
+  const handleCategoryChange = (value: string) => setFilter('category', value);
 
-  const handleSortChange = useCallback(
-    (value: string) => {
-      setFilter('sort', value);
-    },
-    [setFilter],
-  );
+  const handleSortChange = (value: string) => setFilter('sort', value);
 
   const handleScrollEnd = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {

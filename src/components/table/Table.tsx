@@ -25,6 +25,8 @@ export function Table<T>({
   onScrollEnd,
   scrollEndThreshold = 200,
 }: TableProps<T>) {
+  const columnCount = columns.length;
+
   // Virtualization hook
   const { startIndex, endIndex, paddingTop, paddingBottom, onScroll } =
     useVirtualTable({
@@ -35,7 +37,7 @@ export function Table<T>({
       enabled: virtualized && !isLoading,
       onScrollEnd,
       scrollEndThreshold,
-      isFetchingMore, // Pass to prevent scroll during fetch
+      isFetchingMore,
     });
 
   // Empty state
@@ -75,7 +77,7 @@ export function Table<T>({
     );
   }
 
-  // Virtualized table - SINGLE table with sticky header
+  // Virtualized table - spacers INSIDE tbody for stable sticky header
   return (
     <div
       className={cn(
@@ -89,26 +91,14 @@ export function Table<T>({
         className="overflow-auto"
         style={{
           maxHeight: containerHeight,
-          willChange: 'transform',
-          transform: 'translateZ(0)', // Force GPU acceleration
+          willChange: 'scroll-position',
         }}
       >
-        {/* Top padding spacer */}
-        {paddingTop > 0 && (
-          <div
-            style={{
-              height: paddingTop,
-              contain: 'strict',
-              pointerEvents: 'none',
-            }}
-            aria-hidden="true"
-          />
-        )}
-
-        <table className={cn('w-full', tableClassName)}>
-          {/* Sticky header - same table, CSS sticky */}
+        <table className={cn('w-full border-collapse', tableClassName)}>
+          {/* Sticky header */}
           <TableHead columns={columns} sticky />
 
+          {/* Body with internal spacers */}
           <TableBody
             data={data}
             columns={columns}
@@ -119,20 +109,12 @@ export function Table<T>({
             isLoading={isLoading}
             skeletonCount={skeletonCount}
             isFetchingMore={isFetchingMore}
+            // Virtualization spacers - rendered inside tbody
+            paddingTop={paddingTop}
+            paddingBottom={paddingBottom}
+            columnCount={columnCount}
           />
         </table>
-
-        {/* Bottom padding spacer */}
-        {paddingBottom > 0 && (
-          <div
-            style={{
-              height: paddingBottom,
-              contain: 'strict',
-              pointerEvents: 'none',
-            }}
-            aria-hidden="true"
-          />
-        )}
       </div>
     </div>
   );

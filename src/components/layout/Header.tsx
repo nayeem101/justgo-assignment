@@ -51,9 +51,7 @@ export function Header() {
           <div className="p-1.5 bg-indigo-100 rounded-lg">
             <Package className="h-5 w-5 text-indigo-600" />
           </div>
-          <span className="text-lg font-bold hidden sm:block">
-            Product Explorer
-          </span>
+          <span className="text-lg font-bold">Product Explorer</span>
         </Link>
 
         {/* Navigation */}
@@ -80,9 +78,11 @@ export function Header() {
         {/* Right Side - Currency Display */}
         <div className="flex items-center gap-3">
           {/* Currency Badge */}
-          <Badge variant="default" size="lg">
-            {symbol} {currency}
-          </Badge>
+          <span title={`Currency: ${symbol} ${currency}`}>
+            <Badge variant="default" size="lg">
+              {symbol} {currency}
+            </Badge>
+          </span>
 
           {/* Mobile Menu Button */}
           <MobileNav />

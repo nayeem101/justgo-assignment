@@ -24,7 +24,7 @@ export function PageHeader({
       `}
     >
       <div className="flex items-center gap-4">
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">
           {title}
         </h1>
         {typeof count === 'number' && (

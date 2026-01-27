@@ -31,8 +31,8 @@ export const QueryProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* remove this in production */}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* devtools only in development */}
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 };

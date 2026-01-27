@@ -26,23 +26,21 @@ export function SettingsPage() {
     setCurrency(selectedCurrency);
     setIsSaved(true);
 
-    // Reset saved indicator after 2 seconds
-    setTimeout(() => setIsSaved(false), 2000);
+    // Reset saved indicator after 1 second
+    setTimeout(() => setIsSaved(false), 1000);
   };
 
   // Handle cancel
   const handleCancel = () => {
     if (hasChanges) {
-      // Reset to stored value
       setSelectedCurrency(storedCurrency);
     } else {
-      // Navigate back
       navigate(-1);
     }
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
@@ -85,7 +83,7 @@ export function SettingsPage() {
             See how prices will be displayed with your selected currency.
           </p>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <PricePreview
               label="Sample Price"
               basePrice={99.99}
@@ -125,7 +123,7 @@ function PricePreview({
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat(config.locale, {
       style: 'currency',
-      currency: currency,
+      currency,
     }).format(price * config.rate);
   };
 
