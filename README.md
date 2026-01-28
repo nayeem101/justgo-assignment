@@ -1,6 +1,10 @@
-# Product Explorer Dashboard
+# Product Explorer - JustGo Assignment
 
 A React application for exploring product data using the [DummyJSON API](https://dummyjson.com/).
+
+## Live Demo
+
+[Product Explorer Dashboard](https://justgo-assignment.vercel.app/products)
 
 ## Tech Stack
 
