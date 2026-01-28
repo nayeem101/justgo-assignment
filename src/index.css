@@ -125,3 +125,12 @@
 *::-webkit-scrollbar-corner {
   background: #f1f5f9;
 }
+
+/* Hide scrollbar for breadcrumb */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
