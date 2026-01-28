@@ -21,6 +21,10 @@ interface TableBodyProps<T> {
   isLoading?: boolean;
   skeletonCount?: number;
   isFetchingMore?: boolean;
+
+  // Row click
+  onRowClick?: (item: T) => void;
+  clickableOnMobile?: boolean;
 }
 
 export function TableBody<T>({
@@ -36,6 +40,8 @@ export function TableBody<T>({
   isLoading,
   skeletonCount = 5,
   isFetchingMore,
+  onRowClick,
+  clickableOnMobile = false,
 }: TableBodyProps<T>) {
   const colSpan = columnCount ?? columns.length;
 
@@ -82,6 +88,8 @@ export function TableBody<T>({
             item={item}
             index={actualIndex}
             columns={columns}
+            onClick={onRowClick ? () => onRowClick(item) : undefined}
+            clickableOnMobile={clickableOnMobile}
             style={rowHeight ? { height: rowHeight } : undefined}
           />
         );

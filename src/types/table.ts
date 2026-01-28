@@ -30,6 +30,8 @@ export interface TableProps<T> {
   emptyState?: ReactNode;
   onScrollEnd?: () => void;
   scrollEndThreshold?: number;
+  onRowClick?: (item: T) => void;
+  clickableOnMobile?: boolean;
 }
 
 export interface ProductTableProps {

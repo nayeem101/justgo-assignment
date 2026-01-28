@@ -8,9 +8,18 @@ interface TableRowProps<T> {
   index: number;
   columns: Column<T>[];
   style?: CSSProperties;
+  onClick?: () => void;
+  clickableOnMobile?: boolean;
 }
 
-export function TableRow<T>({ item, index, columns, style }: TableRowProps<T>) {
+export function TableRow<T>({
+  item,
+  index,
+  columns,
+  style,
+  onClick,
+  clickableOnMobile = false,
+}: TableRowProps<T>) {
   return (
     <tr
       className={cn(
@@ -19,8 +28,15 @@ export function TableRow<T>({ item, index, columns, style }: TableRowProps<T>) {
         'text-slate-500',
         'transition-colors duration-150',
         'border-b border-slate-100 last:border-b-0',
+        // Clickable row styles
+        onClick && 'cursor-pointer',
+        // Mobile-only clickable styles (visual feedback only on mobile)
+        clickableOnMobile &&
+          onClick &&
+          'md:cursor-default active:bg-slate-100 md:active:bg-transparent',
       )}
       style={style}
+      onClick={onClick}
     >
       {columns.map((column) => (
         <TableCell key={column.key} column={column} item={item} index={index} />
