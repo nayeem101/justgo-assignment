@@ -46,7 +46,6 @@ export const productColumns: Column<Product>[] = [
     key: 'category',
     header: 'Category',
     width: '150px',
-    hideOnMobile: true,
     render: (product) => (
       <Badge variant="default" size="sm" className="capitalize">
         {product.category}
@@ -79,6 +78,7 @@ export const productColumns: Column<Product>[] = [
     header: 'Action',
     width: '100px',
     align: 'right',
+    hideOnMobile: true,
     render: (product) => (
       <Link to={`/products/${product.id}`}>
         <Button variant="outline" size="sm">

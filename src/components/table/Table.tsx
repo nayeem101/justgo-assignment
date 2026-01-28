@@ -24,6 +24,8 @@ export function Table<T>({
   emptyState,
   onScrollEnd,
   scrollEndThreshold = 200,
+  onRowClick,
+  clickableOnMobile,
 }: TableProps<T>) {
   const columnCount = columns.length;
 
@@ -71,6 +73,8 @@ export function Table<T>({
             isLoading={isLoading}
             skeletonCount={skeletonCount}
             isFetchingMore={isFetchingMore}
+            onRowClick={onRowClick}
+            clickableOnMobile={clickableOnMobile}
           />
         </table>
       </div>
@@ -113,6 +117,8 @@ export function Table<T>({
             paddingTop={paddingTop}
             paddingBottom={paddingBottom}
             columnCount={columnCount}
+            onRowClick={onRowClick}
+            clickableOnMobile={clickableOnMobile}
           />
         </table>
       </div>

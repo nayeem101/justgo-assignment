@@ -4,6 +4,8 @@ import { EmptyState } from '../EmptyState';
 import { Table } from '../table/Table';
 import { Button } from '../ui/Button';
 import { productColumns } from './ProductTableColumns';
+import type { Product } from '../../types/product';
+import { useNavigate } from 'react-router';
 
 export function ProductTable({
   products,
@@ -15,6 +17,12 @@ export function ProductTable({
   virtualized = true,
   containerHeight = 600,
 }: ProductTableProps) {
+  const navigate = useNavigate();
+  // Row click handler
+  const handleRowClick = (product: Product) => {
+    navigate(`/products/${product.id}`);
+  };
+
   return (
     <Table
       data={products}
@@ -30,6 +38,8 @@ export function ProductTable({
       onScrollEnd={onScrollEnd}
       scrollEndThreshold={200}
       tableClassName="table-fixed" // Force fixed layout
+      onRowClick={handleRowClick}
+      clickableOnMobile={true}
       emptyState={
         <EmptyState
           icon={<Search className="w-8 h-8" />}

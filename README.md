@@ -106,7 +106,7 @@ Designed the UI mockup using Stitch with Google: [View Design](https://stitch.wi
 
 - **Recent searches** - Not implemented; deferred for core features
 - **Dark mode** - Removed to reduce complexity
-- **Test coverage** - Minimal; would add Vitest for production
+- **Test coverage** - Manually tested; Would add Vitest for production
 - **Server-side sorting** - Client-side only; API limitations
 - **Image caching** - Basic implementation; images reload on virtualized scroll
 
